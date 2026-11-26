@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>中测计量调度中心</title>
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f5f6f8;color:#333}
+.box{text-align:center;padding:32px}
+.dot{width:34px;height:34px;border:4px solid #d0d4dc;border-top-color:#2563eb;border-radius:50%;
+margin:0 auto 18px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+h1{font-size:19px;margin:0 0 8px}
+p{font-size:14px;color:#888;margin:4px 0}
+a{color:#2563eb;text-decoration:none}
+#err{display:none;color:#c0392b;font-size:14px;margin-top:14px;line-height:1.7}
+</style></head><body><div class="box">
+<div class="dot"></div>
+<h1>中测计量调度中心</h1>
+<p id="msg">正在连接最新地址…</p>
+<div id="err"></div>
+</div><script>
+var FALLBACK="https://raw.githubusercontent.com/sinotest/ops/main/url.txt";
+function go(u){document.getElementById("msg").textContent="已连接，正在进入…";location.replace(u);}
+function fail(e){var m=document.getElementById("msg"),d=document.getElementById("err");
+m.textContent="";d.style.display="block";
+d.innerHTML="连接失败，请稍后重试。<br>若持续失败请联系管理员（隧道可能在重启）。<br><a href=\"javascript:location.reload()\">点此重试</a>";}
+function fetchUrl(src,alt){fetch(src+"?t="+Date.now(),{cache:"no-store"})
+.then(function(r){if(!r.ok)throw 0;return r.text()})
+.then(function(t){var u=t.trim();if(!/^https?:\/\//.test(u))throw 0;go(u)})
+.catch(function(){if(src===FALLBACK){fail()}else{fetchUrl(FALLBACK)}});}
+fetchUrl("url.txt");
+</script></body></html>
